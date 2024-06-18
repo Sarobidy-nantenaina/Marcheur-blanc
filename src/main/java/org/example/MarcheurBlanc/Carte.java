@@ -11,8 +11,8 @@ import lombok.NoArgsConstructor;
 @Getter
 @NoArgsConstructor
 public class Carte {
-    private List<Lieu> lieux;
-    private List<Rue> rues;
+    private List<Lieu> lieux = new ArrayList<>();
+    private List<Rue> rues = new ArrayList<>();
 
     public void ajouterLieu(Lieu lieu) {
         lieux.add(lieu);

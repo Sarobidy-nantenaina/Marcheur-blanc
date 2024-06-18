@@ -2,21 +2,19 @@ package org.example.MarcheurBlanc;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
-import java.util.HashSet;
+import java.util.List;
 import java.util.Random;
 import java.util.Set;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 public class MarcheurTest {
-  private Carte carte;
   private Lieu hei;
   private Lieu esti;
   private Marcheur bjarni;
 
   @BeforeEach
   public void setUp() {
-    carte = new Carte();
     Random random = new Random();
 
     hei = new Lieu("HEI");
@@ -28,35 +26,50 @@ public class MarcheurTest {
     Lieu boulevard = new Lieu("Boulevard");
     esti = new Lieu("ESTI");
 
-    carte.ajouterLieu(hei);
-    carte.ajouterLieu(pullman);
-    carte.ajouterLieu(balancoire);
-    carte.ajouterLieu(sekolintsika);
-    carte.ajouterLieu(marais);
-    carte.ajouterLieu(nexta);
-    carte.ajouterLieu(boulevard);
-    carte.ajouterLieu(esti);
+    bjarni = new Marcheur(hei, random);
 
-    carte.ajouterRue(new Rue("Andriatsihoarana", hei, pullman));
-    carte.ajouterRue(new Rue("Rue Sans Nom", hei, balancoire));
-    carte.ajouterRue(new Rue("Rue de Sekolintsika", hei, sekolintsika));
-    carte.ajouterRue(new Rue("Rue de Marais", sekolintsika, marais));
-    carte.ajouterRue(new Rue("Rue de Sekolintsika", sekolintsika, hei));
-    carte.ajouterRue(new Rue("Rue de Marais", marais, sekolintsika));
-    carte.ajouterRue(new Rue("Rue Sans Nom", pullman, hei));
-    carte.ajouterRue(new Rue("Ranaivo", pullman, balancoire));
-    carte.ajouterRue(new Rue("Rue de Nexta", pullman, nexta));
-    carte.ajouterRue(new Rue("Rue de Nexta", nexta, pullman));
-    carte.ajouterRue(new Rue("Rue Sans Nom", balancoire, hei));
-    carte.ajouterRue(new Rue("Ranaivo", balancoire, pullman));
-    carte.ajouterRue(new Rue("Rue du Boulevard", balancoire, boulevard));
-    carte.ajouterRue(new Rue("Rue de l'ESTI", balancoire, esti));
-    carte.ajouterRue(new Rue("Rue du Boulevard", boulevard, balancoire));
-    carte.ajouterRue(new Rue("Rue de l'ESTI", boulevard, esti));
-    carte.ajouterRue(new Rue("Rue de l'ESTI", esti, balancoire));
-    carte.ajouterRue(new Rue("Rue de l'ESTI", esti, boulevard));
+    // Ajouter les rues connues au fur et à mesure
+    bjarni.ajouterRuesConnues(hei, List.of(
+        new Rue("Andriatsihoarana", hei, pullman),
+        new Rue("Rue Sans Nom", hei, balancoire),
+        new Rue("Rue de Sekolintsika", hei, sekolintsika)
+    ));
 
-    bjarni = new Marcheur(hei, new HashSet<>(), carte, random);
+    bjarni.ajouterRuesConnues(pullman, List.of(
+        new Rue("Andriatsihoarana", pullman, hei),
+        new Rue("Ranaivo", pullman, balancoire),
+        new Rue("Rue de Nexta", pullman, nexta)
+    ));
+
+    bjarni.ajouterRuesConnues(balancoire, List.of(
+        new Rue("Rue Sans Nom", balancoire, hei),
+        new Rue("Ranaivo", balancoire, pullman),
+        new Rue("Rue du Boulevard", balancoire, boulevard),
+        new Rue("Rue de l'ESTI", balancoire, esti)
+    ));
+
+    bjarni.ajouterRuesConnues(sekolintsika, List.of(
+        new Rue("Rue de Sekolintsika", sekolintsika, hei),
+        new Rue("Rue de Marais", sekolintsika, marais)
+    ));
+
+    bjarni.ajouterRuesConnues(marais, List.of(
+        new Rue("Rue de Marais", marais, sekolintsika)
+    ));
+
+    bjarni.ajouterRuesConnues(nexta, List.of(
+        new Rue("Rue de Nexta", nexta, pullman)
+    ));
+
+    bjarni.ajouterRuesConnues(boulevard, List.of(
+        new Rue("Rue du Boulevard", boulevard, balancoire),
+        new Rue("Rue de l'ESTI", boulevard, esti)
+    ));
+
+    bjarni.ajouterRuesConnues(esti, List.of(
+        new Rue("Rue de l'ESTI", esti, balancoire),
+        new Rue("Rue de l'ESTI", esti, boulevard)
+    ));
   }
 
   @Test
